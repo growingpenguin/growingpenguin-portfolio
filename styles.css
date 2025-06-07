@@ -129,7 +129,7 @@ body {
 }
 
 .btn-pink {
-  background-color: #ffffff;
+  background-color: #ffff;
   width: 50px;
   height: 50px;
   padding: 0;
@@ -138,4 +138,25 @@ body {
 
 .btn-pink:hover {
   background-color: #ff73b3;
+}
+
+.threejs-canvas-container {
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(to bottom, #f9e0bb, #fff3e6);
+}
+#three-cube {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.threejs-canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
