@@ -7,7 +7,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("three-cube");
   const ctx = canvas.getContext("2d");
 
-  const NAVBAR_HEIGHT = 80;
+  const NAVBAR_HEIGHT = 60;
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight - NAVBAR_HEIGHT;
 
@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function createCookies() {
     const startX = canvas.width - 400;
-    const startY = 100;
+    const startY = 130;
     const gapY = 85;
 
     COOKIE_NAMES.forEach((name, i) => {
