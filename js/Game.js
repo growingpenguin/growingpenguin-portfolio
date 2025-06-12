@@ -7,7 +7,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("three-cube");
   const ctx = canvas.getContext("2d");
 
-  const NAVBAR_HEIGHT = 40;
+  const NAVBAR_HEIGHT = 20;
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight - NAVBAR_HEIGHT;
 
