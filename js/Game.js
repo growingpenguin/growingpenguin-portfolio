@@ -11,8 +11,8 @@ window.addEventListener("DOMContentLoaded", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight - NAVBAR_HEIGHT;
 
-  const penguinWidth = 320;
-  const penguinHeight = 280;
+  const penguinWidth = 370;
+  const penguinHeight = 350;
   const penguinX = 320;
   const penguinY = canvas.height - penguinHeight - 40;
 
