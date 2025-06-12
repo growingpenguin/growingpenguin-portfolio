@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function createCookies() {
     const startX = canvas.width - 400;
-    const startY = 123;
+    const startY = 122;
     const gapY = 110;
 
     COOKIE_NAMES.forEach((name, i) => {
