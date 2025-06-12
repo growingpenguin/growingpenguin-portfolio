@@ -43,8 +43,8 @@ window.addEventListener("DOMContentLoaded", () => {
         img,
         x,
         y,
-        width: 110,
-        height: 110,
+        width: 130,
+        height: 130,
         originalX: x,
         originalY: y
       });
