@@ -60,15 +60,75 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  //function drawScene() {
+  //  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //  const { penguinWidth, penguinHeight, penguinX, penguinY } = getResponsiveValues();
+  //  ctx.drawImage(penguinImg, penguinX, penguinY, penguinWidth, penguinHeight);
+
+  //  for (const cookie of cookies) {
+  //    ctx.drawImage(cookie.img, cookie.x, cookie.y, cookie.width, cookie.height);
+  //  }
+  //}
+
   function drawScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const { penguinWidth, penguinHeight, penguinX, penguinY } = getResponsiveValues();
+    const {
+      penguinWidth,
+      penguinHeight,
+      penguinX,
+      penguinY,
+      cookieSize,
+      startX,
+      startY
+    } = getResponsiveValues();
+
+    // Draw penguin
     ctx.drawImage(penguinImg, penguinX, penguinY, penguinWidth, penguinHeight);
 
-    for (const cookie of cookies) {
-      ctx.drawImage(cookie.img, cookie.x, cookie.y, cookie.width, cookie.height);
-    }
+    // Draw speech bubble in between penguin and cookies
+    const spaceBetween = startX - (penguinX + penguinWidth);
+    const bubbleWidth = Math.min(spaceBetween - 60, canvas.width * 0.25);
+    const bubbleHeight = cookieSize * 1.1;
+    const bubbleX = penguinX + penguinWidth + (spaceBetween - bubbleWidth) / 2;
+    const bubbleY = penguinY + penguinHeight * 0.3;
+
+  drawSpeechBubble(bubbleX, bubbleY, bubbleWidth, bubbleHeight, "Feed me a cookie 🍪");
+
+  // Draw cookies
+  for (const cookie of cookies) {
+    ctx.drawImage(cookie.img, cookie.x, cookie.y, cookie.width, cookie.height);
   }
+}
+
+  function drawSpeechBubble(x, y, w, h, text) {
+    const r = 20; // corner radius
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + w * 0.6, y + h);
+    ctx.lineTo(x + w * 0.5, y + h + 15); // tail
+    ctx.lineTo(x + w * 0.4, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.strokeStyle = "#cccccc";
+    ctx.stroke();
+
+    ctx.fillStyle = "#333";
+    ctx.font = "bold 16px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x + w / 2, y + h / 2);
+  }
+
 
   function isInside(x, y, rect) {
     return (
