@@ -11,11 +11,6 @@ window.addEventListener("DOMContentLoaded", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight - NAVBAR_HEIGHT;
 
-  const penguinWidth = 370;
-  const penguinHeight = 350;
-  const penguinX = 320;
-  const penguinY = canvas.height - penguinHeight - 40;
-
   let penguinImg = new Image();
   let cookies = [];
   let isWinking = false;
@@ -24,15 +19,29 @@ window.addEventListener("DOMContentLoaded", () => {
   let offsetX = 0;
   let offsetY = 0;
 
+  function getResponsiveValues() {
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    const penguinWidth = canvasWidth * 0.2;
+    const penguinHeight = penguinWidth * 0.85;
+    const penguinX = canvasWidth * 0.25;
+    const penguinY = canvasHeight - penguinHeight - 40;
+
+    const cookieSize = canvasWidth * 0.1;
+    const startX = canvasWidth - cookieSize - 50;
+    const startY = canvasHeight * 0.55;
+    const gapY = cookieSize + 20;
+
+    return { penguinWidth, penguinHeight, penguinX, penguinY, cookieSize, startX, startY, gapY };
+  }
+
   function loadPenguin(src) {
     penguinImg.src = src;
   }
 
   function createCookies() {
-    const startX = canvas.width - 400;
-    const startY = 122;
-    const gapY = 150;
-
+    const { cookieSize, startX, startY, gapY } = getResponsiveValues();
     COOKIE_NAMES.forEach((name, i) => {
       const img = new Image();
       img.src = COOKIE_IMAGE_PATH(name);
@@ -43,8 +52,8 @@ window.addEventListener("DOMContentLoaded", () => {
         img,
         x,
         y,
-        width: 150,
-        height: 150,
+        width: cookieSize,
+        height: cookieSize,
         originalX: x,
         originalY: y
       });
@@ -53,6 +62,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function drawScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const { penguinWidth, penguinHeight, penguinX, penguinY } = getResponsiveValues();
     ctx.drawImage(penguinImg, penguinX, penguinY, penguinWidth, penguinHeight);
 
     for (const cookie of cookies) {
@@ -79,26 +89,21 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function winkAndScroll(sectionName) {
-  if (isWinking) return;
-  isWinking = true;
+    if (isWinking) return;
+    isWinking = true;
 
-  // Change to wink image and draw
-  loadPenguin(PENGUIN_WINK_SRC);
-  drawScene();
-
-  // Hold the wink for 1 second before switching back to normal and scrolling
-  setTimeout(() => {
-    loadPenguin(PENGUIN_NORMAL_SRC);
+    loadPenguin(PENGUIN_WINK_SRC);
     drawScene();
-    isWinking = false;
 
-    // Now scroll to section after wink is done
-    const target = document.getElementById(sectionName.toLowerCase());
-    if (target) target.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      loadPenguin(PENGUIN_NORMAL_SRC);
+      drawScene();
+      isWinking = false;
 
-  }, 1000); // Keep wink for 1000 ms (1 second)
-}
-
+      const target = document.getElementById(sectionName.toLowerCase());
+      if (target) target.scrollIntoView({ behavior: "smooth" });
+    }, 1000);
+  }
 
   canvas.addEventListener("mousedown", (e) => {
     const rect = canvas.getBoundingClientRect();
@@ -126,24 +131,35 @@ window.addEventListener("DOMContentLoaded", () => {
 
   canvas.addEventListener("mouseup", () => {
     if (dragging) {
-      const penguinRect = {
-        x: penguinX,
-        y: penguinY,
-        width: penguinWidth,
-        height: penguinHeight,
-      };
+      const { penguinWidth, penguinHeight, penguinX, penguinY } = getResponsiveValues();
+      const penguinRect = { x: penguinX, y: penguinY, width: penguinWidth, height: penguinHeight };
 
       if (isOverlapping(dragging, penguinRect)) {
         winkAndScroll(dragging.name);
       }
 
-      // Reset cookie to original position after release
       dragging.x = dragging.originalX;
       dragging.y = dragging.originalY;
-
       dragging = null;
       drawScene();
     }
+  });
+
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - NAVBAR_HEIGHT;
+
+    cookies.forEach((cookie, i) => {
+      const { cookieSize, startX, startY, gapY } = getResponsiveValues();
+      cookie.width = cookieSize;
+      cookie.height = cookieSize;
+      cookie.x = startX;
+      cookie.y = startY + i * gapY;
+      cookie.originalX = cookie.x;
+      cookie.originalY = cookie.y;
+    });
+
+    drawScene();
   });
 
   function init() {
